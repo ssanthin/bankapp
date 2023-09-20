@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #446eec, #7b5cd6);
+        }
+
+        .form-box {
+            background-color: #ffffff;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            position: relative;
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .form-box input[type="text"],
+        .form-box input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        .form-box input[type="text"]:focus,
+        .form-box input[type="date"]:focus {
+            border-color: #9a67ea;
+            outline: none;
+        }
+
+        .form-box button {
+            background-color: #db185c;
+            color: #ffffff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto 20px auto; /* Added margin-bottom to the submit button */
+        }
+
+        .home-link {
+            display: block;
+            margin: 10px 0;
+            color: #2349d0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .home-link:hover {
+            color: #7c4dff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Insert Account Details</h2>
+    <form id="accountForm" action="/" method="post">
+        <input type="text" id="bankName" name="bankName" placeholder="Bank Name">
+        <input type="text" id="accountNumber" name="accountNumber" placeholder="Account Number">
+        <label for="dueDate">Due Date</label>
+        <input type="date" id="dueDate" name="dueDate" placeholder="Due Date">
+        <input type="text" id="amount" name="amount" placeholder="Amount">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <!-- New link to go back to the welcome page -->
+    <a class="home-link" href="/welcome">← Go home</a>
+</div>
+
+<script>
+document.getElementById('accountForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const dataObj = {};
+    formData.forEach((value, key) => {
+        dataObj[key] = value;
+    });
+
+    fetch('/', {
+        method: 'POST',
+        body: JSON.stringify(dataObj),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.success);
+        window.location.href = '/'; // Redirect to the homepage or wherever you want
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+});
+</script>
+
+</body>
+</html>

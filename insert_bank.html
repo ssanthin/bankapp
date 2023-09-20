@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Account Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #6200ea, #b2a0cf);
+        }
+
+        .form-box {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            position: relative;
+            min-height: 330px; /* Increased height to accommodate header */
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-box input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-box button {
+            background-color: #6200ea;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .form-box button:hover {
+            background-color: #4b00b5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Modern Form</h2> <!-- Added header here -->
+    <form action="#" method="post">
+        <input type="text" placeholder="Bank Name">
+        <input type="text" placeholder="Account Number">
+        <input type="text" placeholder="Due Date">
+        <input type="text" placeholder="Amount">
+       
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

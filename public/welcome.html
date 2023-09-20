@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #446eec, #7b5cd6);
+        }
+
+        button {
+            background-color: #db185c;
+            color: #ffffff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #7c4dff;
+        }
+    </style>
+</head>
+<body>
+
+<button onclick="location.href='/insert'">Insert Account Details</button>
+<button onclick="location.href='/view-accounts'">View Account Details</button>
+
+</body>
+</html>

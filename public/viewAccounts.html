@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg,  #446eec, #7b5cd6);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        .table-container {
+            background-color: #ffffff;
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 20px auto 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .home-link {
+            display: block;
+            margin: 10px 10px;
+            color: #2349d0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .home-link:hover {
+            color: #7c4dff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="table-container">
+    <a class="home-link" href="/welcome">← Go home</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Bank Name</th>
+                <th>Account Number</th>
+                <th>Due Date</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="accountData">
+            <!-- Data will be populated here from the API -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Fetch data from the API when the page loads
+    window.onload = function() {
+        fetch('/accounts')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('accountData');
+                data.forEach(account => {
+                    const row = document.createElement('tr');
+
+                    const bankNameCell = document.createElement('td');
+                    bankNameCell.textContent = account.bank_name;
+                    row.appendChild(bankNameCell);
+
+                    const accountNumberCell = document.createElement('td');
+                    accountNumberCell.textContent = account.account_number;
+                    row.appendChild(accountNumberCell);
+
+                    const dueDateCell = document.createElement('td');
+                    dueDateCell.textContent = account.due_date;
+                    row.appendChild(dueDateCell);
+
+                    const amountCell = document.createElement('td');
+                    amountCell.textContent = account.amount;
+                    row.appendChild(amountCell);
+
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+</script>
+
+</body>
+</html>
