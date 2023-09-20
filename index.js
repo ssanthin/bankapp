@@ -55,6 +55,38 @@ app.post('/', (req, res) => {
     });
 });
 
+app.post('/delete-account', (req, res) => {
+    console.log('Delete request body', req.body);
+    
+    // Extract account number from the request body
+    const accountNumber = req.body.accountNumber;
+
+    // Check if account number is provided
+    if (!accountNumber) {
+        return res.status(400).json({ error: 'Account number is required.' });
+    }
+
+    // SQL query to delete the bank account
+    const sql = 'DELETE FROM account_details WHERE account_number = ?';
+
+    // Execute the query
+    db.query(sql, [accountNumber], (err, result) => {
+        if (err) {
+            console.error('Error deleting bank account:', err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        // Check if any rows were affected (i.e., account was deleted)
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Bank account not found.' });
+        }
+
+        console.log('Bank account deleted:', result);
+        res.json({ success: `Bank account ${accountNumber} deleted successfully!` });
+    });
+});
+
+
 app.get('/accounts', (req, res) => {
     const sql = 'SELECT * FROM account_details';
     db.query(sql, (err, results) => {

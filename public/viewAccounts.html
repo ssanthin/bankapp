@@ -55,18 +55,15 @@
             color: #7c4dff;
         }
 
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            padding: 5px 10px;
+        .delete-icon {
+            font-size: 20px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            color: #ff4d4d;
+            transition: color 0.3s;
         }
 
-        .delete-btn:hover {
-            background-color: #cc0000;
+        .delete-icon:hover {
+            color: #cc0000;
         }
     </style>
 </head>
@@ -116,16 +113,16 @@
                     amountCell.textContent = account.amount;
                     row.appendChild(amountCell);
 
-                    // New delete button for each row
+                    // New delete icon for each row
                     const deleteCell = document.createElement('td');
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = 'Delete';
-                    deleteBtn.className = 'delete-btn';
-                    deleteBtn.onclick = function() {
+                    const deleteIcon = document.createElement('span');
+                    deleteIcon.innerHTML = '🗑'; // Unicode trash can symbol
+                    deleteIcon.className = 'delete-icon';
+                    deleteIcon.onclick = function() {
                         // Add delete functionality here
                         console.log('Delete clicked for account:', account.account_number);
                     };
-                    deleteCell.appendChild(deleteBtn);
+                    deleteCell.appendChild(deleteIcon);
                     row.appendChild(deleteCell);
 
                     tableBody.appendChild(row);
