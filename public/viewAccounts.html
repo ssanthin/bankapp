@@ -54,6 +54,20 @@
         .home-link:hover {
             color: #7c4dff;
         }
+
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +81,7 @@
                 <th>Account Number</th>
                 <th>Due Date</th>
                 <th>Amount</th>
+                <th>Action</th> <!-- New column header for delete action -->
             </tr>
         </thead>
         <tbody id="accountData">
@@ -100,6 +115,18 @@
                     const amountCell = document.createElement('td');
                     amountCell.textContent = account.amount;
                     row.appendChild(amountCell);
+
+                    // New delete button for each row
+                    const deleteCell = document.createElement('td');
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.onclick = function() {
+                        // Add delete functionality here
+                        console.log('Delete clicked for account:', account.account_number);
+                    };
+                    deleteCell.appendChild(deleteBtn);
+                    row.appendChild(deleteCell);
 
                     tableBody.appendChild(row);
                 });
