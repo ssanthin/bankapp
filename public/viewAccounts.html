@@ -65,6 +65,17 @@
         .delete-icon:hover {
             color: #cc0000;
         }
+        .edit-icon {
+        font-size: 20px;
+        cursor: pointer;
+        color: #4CAF50;  /* Green color */
+        margin-left: 10px;  /* Add some space between the delete and edit icons */
+        transition: color 0.3s;
+    }
+
+    .edit-icon:hover {
+        color: #388E3C;  /* Darker green on hover */
+    }
     </style>
 </head>
 <body>
@@ -88,6 +99,18 @@
 </div>
 
 <script>
+    function formatDateToIST(dateString) {
+        const date = new Date(dateString);
+        // Adjust for IST (UTC+5:30)
+        date.setHours(date.getHours() + 5);
+        date.setMinutes(date.getMinutes() + 30);
+        // Extract day, month, and year
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JS
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
     // Fetch data from the API when the page loads
     window.onload = function() {
         fetch('/accounts')
@@ -106,7 +129,7 @@
                     row.appendChild(accountNumberCell);
 
                     const dueDateCell = document.createElement('td');
-                    dueDateCell.textContent = account.due_date;
+                    dueDateCell.textContent = formatDateToIST(account.due_date);
                     row.appendChild(dueDateCell);
 
                     const amountCell = document.createElement('td');
@@ -118,10 +141,50 @@
                     const deleteIcon = document.createElement('span');
                     deleteIcon.innerHTML = '🗑'; // Unicode trash can symbol
                     deleteIcon.className = 'delete-icon';
+                    
+                    // New edit icon for each row
+            const editIcon = document.createElement('span');
+            editIcon.innerHTML = '✏️';  // Unicode pencil symbol
+            editIcon.className = 'edit-icon';
+
+            editIcon.onclick = function() {
+    console.log('Edit clicked for account:', account.account_number);
+    // Redirect to the insert page with account_number as a query parameter
+    window.location.href = `/insert?account_number=${account.account_number}`;
+};
+
+
+
+            deleteCell.appendChild(editIcon);  // Append the edit icon to the same cell as the delete icon
+
                     deleteIcon.onclick = function() {
-                        // Add delete functionality here
-                        console.log('Delete clicked for account:', account.account_number);
-                    };
+    console.log('Delete clicked for account:', account.account_number);
+
+    // Make an AJAX request to delete the bank account
+    fetch('/delete-account', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ accountNumber: account.account_number })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(data.success);
+            // Refresh the page after successful deletion
+            location.reload();
+        } else if (data.error) {
+            console.error(data.error);
+            alert(data.error);  // Optionally show the error to the user
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting bank account:', error);
+        alert('An error occurred while deleting the bank account. Please try again.');  // Show error to the user
+    });
+};
+
                     deleteCell.appendChild(deleteIcon);
                     row.appendChild(deleteCell);
 

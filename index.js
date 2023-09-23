@@ -22,9 +22,18 @@ db.connect((err) => {
     console.log('Connected to the database.');
 });
 
+const fs = require('fs');
+
 app.get('/insert', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'insert.html'));
+    const accountNumber = req.query.account_number;
+    if (accountNumber) {
+        // get the account details from database and then populate insert.html before sending back.
+    } else {
+        // Send the original HTML file for inserting a new account
+        res.sendFile(path.join(__dirname, 'public', 'insert.html'));
+    }
 });
+
 
 // This is the new route to serve the page that displays account details
 app.get('/view-accounts', (req, res) => {
