@@ -27,12 +27,34 @@ const fs = require('fs');
 app.get('/insert', (req, res) => {
     const accountNumber = req.query.account_number;
     if (accountNumber) {
-        // get the account details from database and then populate insert.html before sending back.
+        // Fetch the existing account details from the database using accountNumber
+        const sql = 'SELECT * FROM account_details WHERE account_number = ?';
+        db.query(sql, [accountNumber], (err, result) => {
+            if (err) {
+                console.error('Error fetching account:', err);
+                return res.status(500).json({ error: err.message });
+            }
+            if (result.length === 0) {
+                return res.status(404).json({ error: 'Account not found' });
+            }
+            const account = result[0];
+            console.log('account sidharth ',account)
+            // Read the HTML file and populate it with existing account details
+            fs.readFile(path.join(__dirname, 'public', 'insert.html'), 'utf8', (err, data) => {
+                if (err) {
+                    console.error('Error reading HTML file:', err);
+                    return res.status(500).json({ error: err.message });
+                }
+                let modifiedHtml = data.replace('const dataObj = {};', `const dataObj = ${JSON.stringify(account)};`);
+                res.send(modifiedHtml);
+            });
+        });
     } else {
         // Send the original HTML file for inserting a new account
         res.sendFile(path.join(__dirname, 'public', 'insert.html'));
     }
 });
+
 
 
 // This is the new route to serve the page that displays account details
@@ -45,7 +67,17 @@ app.get('/welcome', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    console.log('request body',req.body)
+    console.log('request body', req.body);
+
+    // Validation
+    if (!req.body.bankName || req.body.bankName.trim() === '') {
+        return res.status(400).json({ error: 'Bank name cannot be empty' });
+    }
+
+    if (!/^\d{5}$/.test(req.body.accountNumber)) {
+        return res.status(400).json({ error: 'Account number must be a 5-digit number' });
+    }
+
     const formData = {
         bank_name: req.body.bankName,
         account_number: req.body.accountNumber,
@@ -63,6 +95,7 @@ app.post('/', (req, res) => {
         res.json({ success: 'Data saved successfully!' });
     });
 });
+
 
 app.post('/delete-account', (req, res) => {
     console.log('Delete request body', req.body);

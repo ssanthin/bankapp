@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Form</title>
+    <title>insert account</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,11 +90,32 @@
 </div>
 
 <script>
+// Initialize dataObj as an empty object
+const dataObj = {};
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Pre-fill form if dataObj is not empty
+    if (Object.keys(dataObj).length > 0) {
+        document.getElementById('bankName').value = dataObj.bank_name || '';
+        document.getElementById('accountNumber').value = dataObj.account_number || '';
+        document.getElementById('dueDate').value = formatDateToInput(dataObj.due_date) || '';
+        document.getElementById('amount').value = dataObj.amount || '';
+    }
+});
+
+
+function formatDateToInput(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 document.getElementById('accountForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(this);
-    const dataObj = {};
     formData.forEach((value, key) => {
         dataObj[key] = value;
     });
@@ -117,7 +138,7 @@ document.getElementById('accountForm').addEventListener('submit', function(event
     })
     .then(data => {
         alert(data.success);
-        window.location.href = '/'; // Redirect to the homepage or wherever you want
+        window.location.href = '/insert'; // Redirect to the homepage or wherever you want
     })
     .catch(error => {
         alert('Error: ' + error.message);
