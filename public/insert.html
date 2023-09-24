@@ -11,7 +11,8 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(45deg, #446eec, #7b5cd6);
+            background:linear-gradient(45deg, #3498db, #1abc9c);
+
         }
 
         .form-box {
@@ -82,7 +83,7 @@
         <label for="dueDate">Due Date</label>
         <input type="date" id="dueDate" name="dueDate" placeholder="Due Date">
         <input type="text" id="amount" name="amount" placeholder="Amount">
-        <button type="submit">Submit</button>
+        <button type="submit" id="submitButton">Submit</button>
     </form>
     
     <!-- New link to go back to the welcome page -->
@@ -100,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('accountNumber').value = dataObj.account_number || '';
         document.getElementById('dueDate').value = formatDateToInput(dataObj.due_date) || '';
         document.getElementById('amount').value = dataObj.amount || '';
+        // Change button text to "Update" and set a flag to indicate it's an update operation
+        document.getElementById('submitButton').textContent = 'Update';
     }
 });
 
@@ -119,8 +122,10 @@ document.getElementById('accountForm').addEventListener('submit', function(event
     formData.forEach((value, key) => {
         dataObj[key] = value;
     });
+    const isUpdate = document.getElementById('submitButton').textContent === 'Update';
+    const apiEndpoint = isUpdate ? '/update-account' : '/';
 
-    fetch('/', {
+    fetch(apiEndpoint, {
         method: 'POST',
         body: JSON.stringify(dataObj),
         headers: {

@@ -97,6 +97,50 @@ app.post('/', (req, res) => {
 });
 
 
+app.post('/update-account', (req, res) => {
+    console.log('request body', req.body);
+
+    // Validation
+    if (!req.body.bankName || req.body.bankName.trim() === '') {
+        return res.status(400).json({ error: 'Bank name cannot be empty' });
+    }
+
+    if (!/^\d{5}$/.test(req.body.accountNumber)) {
+        return res.status(400).json({ error: 'Account number must be a 5-digit number' });
+    }
+
+    // Check if the account exists
+    const checkSql = 'SELECT * FROM account_details WHERE account_number = ?';
+    db.query(checkSql, [req.body.accountNumber], (err, result) => {
+        if (err) {
+            console.error('Error fetching account:', err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Account not found' });
+        }
+
+        // Update the account
+        const formData = {
+            bank_name: req.body.bankName,
+            due_date: req.body.dueDate,
+            amount: req.body.amount
+        };
+
+        const updateSql = 'UPDATE account_details SET ? WHERE account_number = ?';
+        db.query(updateSql, [formData, req.body.accountNumber], (err, result) => {
+            if (err) {
+                console.error('Error updating account:', err);
+                return res.status(500).json({ error: err.message });
+            }
+
+            console.log('Account updated:', result);
+            res.json({ success: 'Account updated successfully!' });
+        });
+    });
+});
+
 app.post('/delete-account', (req, res) => {
     console.log('Delete request body', req.body);
     
